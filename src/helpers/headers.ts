@@ -1,4 +1,5 @@
-import { isPlainObject } from "./util";
+import { Method } from './../types/index';
+import { isPlainObject, deepMerge } from "./util";
 
 /**
  * 请求头的key对大小写不敏感，我们需要统一转换，方便判断用户是否手动添加了某个请求头
@@ -66,4 +67,29 @@ export function parseHeaders(headers:string):any{
     })
 
     return parse
+}
+
+/**
+ * 处理headers
+ *
+ * @export
+ * @param {*} headers
+ * @param {Method} method
+ * @returns {*}
+ */
+export function flattenHeaders(headers:any,method:Method):any{
+    if(!headers){
+        return headers
+    }
+    headers = deepMerge(headers.common,headers[method],headers)
+
+    // 需要从headers中删除的无用key
+    const methodsToDelete = ['delete', 'get', 'head', 'options', 'post', 'put', 'patch', 'common']
+
+    methodsToDelete.forEach(key=>{
+        delete headers[key]
+    })
+
+    return headers
+
 }

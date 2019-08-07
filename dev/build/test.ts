@@ -140,33 +140,33 @@ import axios from '../../src/index'
 //     }
 // })
 
-axios({
-    method: 'get',
-    url: '/test/get',
-    params: { msg: 'get msg' }
-}).then(res => {
-    console.log(res)
-})
+// axios({
+//     method: 'get',
+//     url: '/test/get',
+//     params: { msg: 'get msg' }
+// }).then(res => {
+//     console.log(res)
+// })
 
 
-interface Result {
-    msg?: String
-}
+// interface Result {
+//     msg?: String
+// }
 
 
-axios<Result>('/test/get', {
-    method: 'get',
-    params: { msg: 'get msg1111' }
-}).then((res) => {
-    console.log(res.data.msg)
-})
+// axios<Result>('/test/get', {
+//     method: 'get',
+//     params: { msg: 'get msg1111' }
+// }).then((res) => {
+//     console.log(res.data.msg)
+// })
 
-axios.request<Result>('/test/get', {
-    method: 'get',
-    params: { msg: 'get msg111112313' }
-}).then((res) => {
-    console.log(res.data.msg)
-})
+// axios.request<Result>('/test/get', {
+//     method: 'get',
+//     params: { msg: 'get msg111112313' }
+// }).then((res) => {
+//     console.log(res.data.msg)
+// })
 
 
 
@@ -182,3 +182,55 @@ axios.request<Result>('/test/get', {
 // axios.post('/base/post',{msg:'post msg'}).then(res=>{
 //     console.log(res)
 // })
+
+// axios.interceptors.request.use(config => {
+//     config.headers.test += '1'
+//     return config
+// })
+// axios.interceptors.request.use(config => {
+//     config.headers.test += '2'
+//     return config
+// })
+// axios.interceptors.request.use(config => {
+//     config.headers.test += '3'
+//     return config
+// })
+
+// axios.interceptors.respond.use(res => {
+//     res.data += '1'
+//     return res
+// })
+// let interceptor = axios.interceptors.respond.use(res => {
+//     res.data += '2'
+//     return res
+// })
+// axios.interceptors.respond.use(res => {
+//     res.data += '3'
+//     return res
+// })
+
+// axios.interceptors.respond.eject(interceptor)
+
+// axios({
+//     url: '/test/get',
+//     method: 'get',
+//     headers: {
+//         test: ''
+//     }
+// }).then((res) => {
+//     console.log(res.data)
+// })
+
+axios.defaults.headers.common['test2']=13213
+// axios.defaults.headers.
+
+axios({
+  url: '/base/post',
+  method: 'post',
+  data: 'a=1&b=2',
+  headers: {
+    test: '321'
+  }
+}).then((res) => {
+  console.log(res.data)
+})

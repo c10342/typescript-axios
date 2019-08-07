@@ -1,3 +1,4 @@
+import InterceptorManager from "../core/interceptorManager";
 
 // 项目公共类型定义文件
 
@@ -12,7 +13,10 @@ export interface AxiosRequestConfig {
     data?: any; // post请求的数据
     headers?: any;
     responseType?: XMLHttpRequestResponseType; // 服务器响应数据类型
-    timeout?: number // 超时时间
+    timeout?: number, // 超时时间
+
+    // 索引  xxx['name']
+    [propsName:string]:any
 }
 
 // 响应类型
@@ -56,6 +60,13 @@ export interface AxiosError extends Error {
  * @interface Axios
  */
 export interface Axios {
+    // 拦截器
+    interceptors:{
+        request:InterceptorManager<AxiosRequestConfig>
+        respond:InterceptorManager<AxiosResponse>
+    }
+    // 配置
+    defaults:AxiosRequestConfig,
     request<T = any>(url:String | AxiosRequestConfig,config?: AxiosRequestConfig): AxiosPromise<T>
     get<T = any>(url: String, config?: AxiosRequestConfig): AxiosPromise<T>
     delete<T = any>(url: String, config?: AxiosRequestConfig): AxiosPromise<T>
@@ -66,6 +77,13 @@ export interface Axios {
 }
 
 
+/**
+ * 函数重载，要么有2个参数，要么有1个参数
+ *
+ * @export
+ * @interface AxiosInstance
+ * @extends {Axios}
+ */
 export interface AxiosInstance extends Axios {
     // (config:AxiosRequestConfig) 方法参数类型
     // AxiosPromise 方法返回值
@@ -73,4 +91,26 @@ export interface AxiosInstance extends Axios {
 
     // 实现函数重载
     <T = any>(url: String, config?: AxiosRequestConfig): AxiosPromise<T>
+}
+
+
+/**
+ * 定义拦截器接口
+ *
+ * @export
+ * @interface AxiosInterceptorManager
+ * @template T
+ */
+export interface AxiosInterceptorManager<T>{
+    use(resolve:ResolveFn<T>,reject?:RejectFn):number
+
+    eject(id:number):void
+}
+
+export interface ResolveFn<T>{
+    (val:T):T | Promise<T>
+}
+
+export interface RejectFn{
+    (error:any):any
 }
