@@ -25,6 +25,14 @@ export interface AxiosResponse<T = any> {
     request: any // xhr 对象
 }
 
+/**
+ * axios请求返回类型
+ *
+ * @export
+ * @interface AxiosPromise
+ * @extends {Promise<AxiosResponse<T>>}
+ * @template T
+ */
 export interface AxiosPromise<T = any> extends Promise<AxiosResponse<T>> { }
 
 /**

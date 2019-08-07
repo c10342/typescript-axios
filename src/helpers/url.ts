@@ -42,7 +42,7 @@ export function buildURL(url: string, params?: any): string {
 
         let values = []
 
-        // 请求参数类型可能是数组或者特殊符号,如{a:1,b:[1,2],c:'%'} a=1&b=1&b=2&c=%
+        // 请求参数类型可能是数组或者特殊符号,如{a:1,b:[1,2],c:'%'} a=1&b[]=1&b[]=2&c=%
         // 这里统一转成数组处理
         if (Array.isArray(val)) {
             values = val

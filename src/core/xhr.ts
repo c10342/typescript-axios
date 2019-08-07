@@ -9,8 +9,8 @@ import { createError } from '../helpers/error';
  * @param {AxiosRequestConfig} config
  */
 export default function xhr(config: AxiosRequestConfig): AxiosPromise {
-    return new Promise((resolve,reject) => {
-        const { data = null, url, method = 'get', headers, responseType,timeout } = config
+    return new Promise((resolve, reject) => {
+        const { data = null, url, method = 'get', headers, responseType, timeout } = config
 
         const request = new XMLHttpRequest()
 
@@ -19,20 +19,21 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
             request.responseType = responseType
         }
 
-        if(timeout){
+        // 设置超时时间
+        if (timeout) {
             request.timeout = timeout
         }
 
         request.open(method.toUpperCase(), url!, true)
 
         // 网络发生错误
-        request.onerror = function(){
-            reject(createError('NetWork Error',config,'error',request))
+        request.onerror = function () {
+            reject(createError('NetWork Error', config, 'error', request))
         }
 
         // 响应超时
-        request.ontimeout = function(){
-            reject(createError(`Timeout of ${timeout} ms execeded`,config,'error',request))
+        request.ontimeout = function () {
+            reject(createError(`Timeout of ${timeout} ms execeded`, config, 'error', request))
         }
 
         request.onreadystatechange = function () {
@@ -41,10 +42,10 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
             }
 
             // 网络错误或者超时 status为0
-            if(request.status === 0){
+            if (request.status === 0) {
                 return
             }
-            
+
             const responseHeaders = parseHeaders(request.getAllResponseHeaders()) // 获取响应头
             const responseData = responseType === 'text' ? request.responseText : request.response  // 服务器响应数据
 
@@ -60,11 +61,11 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
             handelResponse(response)
         }
 
-        function handelResponse(res:AxiosResponse):void{
-            if(res.status>= 200 && res.status<300){
+        function handelResponse(res: AxiosResponse): void {
+            if (res.status >= 200 && res.status < 300) {
                 resolve(res)
-            }else{
-                reject(createError(`Request failed with status code ${res.status}`,config,'error',request,res))
+            } else {
+                reject(createError(`Request failed with status code ${res.status}`, config, 'error', request, res))
             }
         }
 
