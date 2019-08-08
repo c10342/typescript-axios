@@ -5,7 +5,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 module.exports = {
     mode: 'production',
-    devtool: "cheap-module-source-map",
+    devtool: "cheap-module-eval-source-map",
     entry: {
         main: path.join(__dirname, './test.ts')
     },

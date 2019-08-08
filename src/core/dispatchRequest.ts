@@ -1,8 +1,9 @@
 import {AxiosRequestConfig, AxiosPromise, AxiosResponse} from '../types/index'
 import xhr from './xhr';
 import { buildURL } from '../helpers/url';
-import { transformRequest, transformResponse } from '../helpers/data';
-import { processHeaders, flattenHeaders } from '../helpers/headers';
+import { flattenHeaders } from '../helpers/headers';
+import transform from './transform';
+import defaults from '../default';
 
 export default function dispatchRequest(config:AxiosRequestConfig):AxiosPromise{
     processConfig(config)
@@ -17,13 +18,13 @@ export default function dispatchRequest(config:AxiosRequestConfig):AxiosPromise{
  * @param {AxiosRequestConfig} config
  */
 function processConfig(config:AxiosRequestConfig):void{
+    // 请求处理url
     config.url = transformURL(config)
 
-    // transformHeaders必须在处理数据前执行，否则数据经过处理之后可能会与headers设置的不一致
-    config.headers = transformHeaders(config)
-    
-    config.data = transformRequestData(config)
+    // 处理请求头和请求数据
+    config.data = transform(config.data,config.headers,config.transformRequest)
 
+    // 合并默认配置和用户输入的配置
     config.headers = flattenHeaders(config.headers,config.method!)
 }
 
@@ -40,36 +41,12 @@ function transformURL(config:AxiosRequestConfig):string{
 }
 
 /**
- * 处理post请求数据
- *
- * @param {AxiosRequestConfig} config
- * @returns {*}
- */
-function transformRequestData(config:AxiosRequestConfig):any{
-    const {data} = config
-
-    return transformRequest(data)
-}
-
-/**
- * 处理请求头
- *
- * @param {AxiosRequestConfig} config
- * @returns {*}
- */
-function transformHeaders(config:AxiosRequestConfig):any{
-    const {headers = {} , data} = config
-
-    return processHeaders(headers,data)
-}
-
-/**
- * 尝试把服务器返回来的数据转化为json
+ * 处理响应数据
  *
  * @param {AxiosResponse} res
  * @returns {AxiosResponse}
  */
 function transformResponseData(res:AxiosResponse):AxiosResponse{
-    res.data = transformResponse(res.data)
+    res.data = transform(res.data,res.headers,res.config.transformRespond)
     return res
 }

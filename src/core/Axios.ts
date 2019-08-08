@@ -52,7 +52,6 @@ export default class Axios {
                 reject: undefined
             }
         ]
-
         // request后添加的先执行
         this.interceptors.request.forEach(interceptor => {
             chain.unshift(interceptor)
@@ -61,7 +60,6 @@ export default class Axios {
         this.interceptors.respond.forEach(interceptor => {
             chain.push(interceptor)
         })
-
         //  [{...请求拦截器},{resolve: dispatchRequest,reject: undefined},{...响应拦截器}]
 
         let promise = Promise.resolve(config)
@@ -70,7 +68,6 @@ export default class Axios {
             const { resolve, reject } = chain.shift()!
             promise = promise.then(resolve, reject)
         }
-
         return promise
     }
 
