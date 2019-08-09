@@ -6,6 +6,28 @@ const app = express()
 
 const path = require('path')
 
+const webpack = require('webpack')
+
+const webpackConfig = require('./build/webpack.config.js')
+
+const webpackDevMiddleware = require('webpack-dev-middleware')
+
+const webpackHotMiddleware = require('webpack-hot-middleware')
+
+const compiler = webpack(webpackConfig)
+
+app.use(webpackDevMiddleware(compiler,{
+    stats:{
+        colors:true,
+        chunks:false
+    }
+}))
+
+app.use(webpackHotMiddleware(compiler))
+
+
+app.use(express.static(__dirname))
+
 
 // 处理post请求数据
 app.use(bodyParser.urlencoded({
@@ -45,7 +67,6 @@ app.post('/buff/post',function(req,res){
     })
 })
 
-app.use('/', express.static(path.join(__dirname, './dist')))
 
 const port = process.env.PORT || 5001
 

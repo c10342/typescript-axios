@@ -1,5 +1,5 @@
 import axios, { AxiosTransform } from '../../src/index'
-import qs from 'qs'
+import './index.css'
 
 // axios({
 //     url: '/simple/get',
@@ -235,7 +235,6 @@ import qs from 'qs'
 // }).then((res) => {
 //   console.log(res.data)
 // })
-
 axios({
   transformRequest: [(function(data) {
     // console.log(qs.stringify)
@@ -254,7 +253,7 @@ axios({
     a: 1
   }
 }).then((res) => {
-  console.log(res)
+  console.log(res.data)
 })
 
 // const a= [1,2,3,4,5]
@@ -264,3 +263,7 @@ axios({
 // b.push(...a)
 
 // console.log(b)
+
+if(module.hot){
+  module.hot.accept()
+}
