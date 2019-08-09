@@ -7,12 +7,12 @@ import { isPlainObject, deepMerge } from "./util";
  * @param {*} headers
  * @param {string} normalizeName
  */
-function normalizeHeaderName(headers:any,normalizeName:string):void{
-    if(!headers){
+function normalizeHeaderName(headers: any, normalizeName: string): void {
+    if (!headers) {
         return
     }
-    Object.keys(headers).forEach(name=>{
-        if(name !== normalizeName && name.toUpperCase() === normalizeName.toUpperCase()){
+    Object.keys(headers).forEach(name => {
+        if (name !== normalizeName && name.toUpperCase() === normalizeName.toUpperCase()) {
             headers[normalizeName] = headers[name]
             delete headers[name]
         }
@@ -27,10 +27,10 @@ function normalizeHeaderName(headers:any,normalizeName:string):void{
  * @param {*} data
  * @returns {*}
  */
-export function processHeaders(headers:any,data:any) :any{
-    normalizeHeaderName(headers,'Content-Type')
-    if(isPlainObject(data)){
-        if(headers && !headers['Content-Type']){ // 有些数据类型不需要手动添加Content-Type，浏览器会自动根据数据类型添加上去
+export function processHeaders(headers: any, data: any): any {
+    normalizeHeaderName(headers, 'Content-Type')
+    if (isPlainObject(data)) {
+        if (headers && !headers['Content-Type']) { // 有些数据类型不需要手动添加Content-Type，浏览器会自动根据数据类型添加上去
             headers['Content-Type'] = 'application/json;charset=utf-8'
         }
     }
@@ -45,22 +45,22 @@ export function processHeaders(headers:any,data:any) :any{
  * @param {string} headers
  * @returns {*}
  */
-export function parseHeaders(headers:string):any{
+export function parseHeaders(headers: string): any {
     let parse = Object.create({}) // 构建一个空对象
-    if(!headers){
+    if (!headers) {
         return parse
     }
 
-    headers.split('\r\n').forEach(line=>{
-        let [key,val] = line.split(':')
+    headers.split('\r\n').forEach(line => {
+        let [key, val] = line.split(':')
 
         key = key.trim().toLowerCase()
 
-        if(!key){
+        if (!key) {
             return
         }
 
-        if(val){
+        if (val) {
             val = val.trim()
             parse[key] = val
         }
@@ -71,25 +71,49 @@ export function parseHeaders(headers:string):any{
 
 /**
  * 处理headers
+ * {
+ *   headers:{
+ *       common:{
+ *           Accept:'application/x-www-form-urlencoded'
+ *       }
+ *       post:{
+ *           test:'123'
+ *       }
+ *       delete:{
+ *           test1:'333'
+ *       }
+ *   }
+ *}
+ *
+ *post  => {
+ *   headers:{
+ *       Accept:'application/x-www-form-urlencoded'
+ *       test:'123'
+ *   }
+ *}
+ * 
  *
  * @export
  * @param {*} headers
  * @param {Method} method
  * @returns {*}
  */
-export function flattenHeaders(headers:any,method:Method):any{
-    if(!headers){
+export function flattenHeaders(headers: any, method: Method): any {
+    if (!headers) {
         return headers
     }
-    headers = deepMerge(headers.common,headers[method],headers)
+    headers = deepMerge(headers.common, headers[method], headers)
 
     // 需要从headers中删除的无用key
     const methodsToDelete = ['delete', 'get', 'head', 'options', 'post', 'put', 'patch', 'common']
 
-    methodsToDelete.forEach(key=>{
+    methodsToDelete.forEach(key => {
         delete headers[key]
     })
 
     return headers
 
 }
+
+
+

@@ -49,13 +49,13 @@ export function extend<T, U>(to: T, from: U): T & U {
     for (const key in from) {
         ; (to as T & U)[key] = from[key] as any
     }
-
+    // T & U 混合类型
     return to as T & U
 }
 
 /**
  * 深拷贝对象
- *
+ * 
  * @export
  * @param {...any[]} objs
  * @returns {*}
@@ -80,4 +80,6 @@ export function deepMerge(...objs: any[]): any {
     })
     return result
 }
+
+
 

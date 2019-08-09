@@ -55,11 +55,14 @@ export default function mergeConfig(config1: AxiosRequestConfig, config2?: Axios
 
     const config = Object.create(null)
 
+    // 处理用户传递进来的配置
     for (const key in config2) {
         mergeFiled(key)
     }
 
+    // 默认配置
     for (const key in config1) {
+        // 用户没有传递进来的就是用默认的
         if (!config2[key]) {
             mergeFiled(key)
         }

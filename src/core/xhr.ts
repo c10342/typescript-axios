@@ -61,6 +61,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
             handelResponse(response)
         }
 
+        // 处理响应
         function handelResponse(res: AxiosResponse): void {
             if (res.status >= 200 && res.status < 300) {
                 resolve(res)

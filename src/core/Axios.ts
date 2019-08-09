@@ -21,14 +21,15 @@ export default class Axios {
     interceptors: Interceptors
     // 配置
     defaults:AxiosRequestConfig
-    constructor(defaults:AxiosRequestConfig) {
+
+    constructor(defaultsConfig:AxiosRequestConfig) {
         // 初始化拦截器
         this.interceptors = {
             request: new InterceptorManager<AxiosRequestConfig>(),
             respond: new InterceptorManager<AxiosResponse>()
         }
-        // 初始化配置
-        this.defaults = defaults
+        // 初始化默认配置
+        this.defaults = defaultsConfig
     }
 
     // 函数重载
@@ -43,6 +44,7 @@ export default class Axios {
         } else {
             config = url
         }
+        // 把用户传递进来的配置跟默认配置进行合并
         config = mergeConfig(this.defaults,config)
 
         // 定义一个数组,方便实现链式调用
@@ -53,20 +55,22 @@ export default class Axios {
             }
         ]
 
-        // request后添加的先执行
+        // request拦截器后添加的先执行
+        // this.interceptors.request.forEach  是执行 this.interceptors.request对象中的forEach方法，不是遍历
         this.interceptors.request.forEach(interceptor => {
-            chain.unshift(interceptor)
+            chain.unshift(interceptor)  // 把拦截器添加到chain中
         })
-        // respond先添加的先执行
+        // respond拦截器先添加的先执行
         this.interceptors.respond.forEach(interceptor => {
             chain.push(interceptor)
         })
 
-        //  [{...请求拦截器},{resolve: dispatchRequest,reject: undefined},{...响应拦截器}]
+        //  chain = [{...请求拦截器},{resolve: dispatchRequest,reject: undefined},{...响应拦截器}]
 
         let promise = Promise.resolve(config)
         // 实现链式调用
         while (chain.length) {
+            // 取出chain第一个元素并删除
             const { resolve, reject } = chain.shift()!
             promise = promise.then(resolve, reject)
         }

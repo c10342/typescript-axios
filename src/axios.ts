@@ -8,9 +8,8 @@ function createInstance(config:AxiosRequestConfig): AxiosInstance {
     const context = new Axios(config)
 
     const instance = Axios.prototype.request.bind(context)
+    
     // 实现混合对象
-    //  extend(instance, context)
-
     return extend(instance, context)
 }
 
