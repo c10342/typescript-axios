@@ -1,4 +1,5 @@
-import axios from '../../src/index'
+import axios, { AxiosTransform } from '../../src/index'
+import qs from 'qs'
 
 // axios({
 //     url: '/simple/get',
@@ -184,7 +185,7 @@ import axios from '../../src/index'
 // })
 
 // axios.interceptors.request.use(config => {
-//     config.headers.test += '1'
+//     console.log(config)
 //     return config
 // })
 // axios.interceptors.request.use(config => {
@@ -221,16 +222,45 @@ import axios from '../../src/index'
 //     console.log(res.data)
 // })
 
-axios.defaults.headers.common['test2']=13213
-// axios.defaults.headers.
+// axios.defaults.headers.common['test2']=13213
+// // axios.defaults.headers.
+
+// axios({
+//   url: '/base/post',
+//   method: 'post',
+//   data: 'a=1&b=2',
+//   headers: {
+//     test: '321'
+//   }
+// }).then((res) => {
+//   console.log(res.data)
+// })
 
 axios({
+  transformRequest: [(function(data) {
+    // console.log(qs.stringify)
+    // return qs.stringify(data)
+    return data
+  }), ...(axios.defaults.transformRequest as AxiosTransform[])],
+  transformRespond: [...(axios.defaults.transformRespond as AxiosTransform[]), function(data) {
+    if (typeof data === 'object') {
+      data.b = 2
+    }
+    return data
+  }],
   url: '/base/post',
   method: 'post',
-  data: 'a=1&b=2',
-  headers: {
-    test: '321'
+  data: {
+    a: 1
   }
 }).then((res) => {
-  console.log(res.data)
+  console.log(res)
 })
+
+// const a= [1,2,3,4,5]
+
+// const b = [6,7]
+
+// b.push(...a)
+
+// console.log(b)

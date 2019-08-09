@@ -23,7 +23,11 @@ app.get('/test/get',function(req,res){
 })
 
 app.post('/base/post',function(req,res){
-    res.json(req.body)
+    try {
+        res.json(req.body)
+    } catch (error) {
+        res.send(error.toString())
+    }
 })
 
 app.post('/buff/post',function(req,res){

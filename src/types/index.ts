@@ -14,6 +14,10 @@ export interface AxiosRequestConfig {
     headers?: any;
     responseType?: XMLHttpRequestResponseType; // 服务器响应数据类型
     timeout?: number, // 超时时间
+    // 请求前修改数据
+    transformRequest?:AxiosTransform | AxiosTransform[],
+    // 请求后修改数据
+    transformRespond?:AxiosTransform | AxiosTransform[]
 
     // 索引  xxx['name']
     [propsName:string]:any
@@ -93,6 +97,10 @@ export interface AxiosInstance extends Axios {
     <T = any>(url: String, config?: AxiosRequestConfig): AxiosPromise<T>
 }
 
+export interface AxiosStatic extends AxiosInstance{
+    create(config:AxiosRequestConfig):AxiosInstance
+}
+
 
 /**
  * 定义拦截器接口
@@ -113,4 +121,9 @@ export interface ResolveFn<T>{
 
 export interface RejectFn{
     (error:any):any
+}
+
+// 定义函数类型接口
+export interface AxiosTransform{
+    (data:any,headers?:any):any
 }

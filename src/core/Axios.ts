@@ -57,6 +57,7 @@ export default class Axios {
 
         // request拦截器后添加的先执行
         // this.interceptors.request.forEach  是执行 this.interceptors.request对象中的forEach方法，不是遍历
+        // request后添加的先执行
         this.interceptors.request.forEach(interceptor => {
             chain.unshift(interceptor)  // 把拦截器添加到chain中
         })
@@ -66,6 +67,7 @@ export default class Axios {
         })
 
         //  chain = [{...请求拦截器},{resolve: dispatchRequest,reject: undefined},{...响应拦截器}]
+        //  [{...请求拦截器},{resolve: dispatchRequest,reject: undefined},{...响应拦截器}]
 
         let promise = Promise.resolve(config)
         // 实现链式调用
@@ -74,7 +76,6 @@ export default class Axios {
             const { resolve, reject } = chain.shift()!
             promise = promise.then(resolve, reject)
         }
-
         return promise
     }
 
