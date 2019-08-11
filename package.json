@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "description": "",
   "keywords": [],
-  "main": "dist/ts-axios.umd.js",
-  "module": "dist/ts-axios.es5.js",
-  "typings": "dist/types/ts-axios.d.ts",
+  "main": "dist/axios.umd.js",
+  "module": "dist/axios.es5.js",
+  "typings": "dist/types/index.d.ts",
   "files": [
     "dist"
   ],
@@ -52,7 +52,7 @@
     "transform": {
       ".(ts|tsx)": "ts-jest"
     },
-    "testEnvironment": "node",
+    "testEnvironment": "jsdom",
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
     "moduleFileExtensions": [
       "ts",
@@ -72,7 +72,8 @@
       }
     },
     "collectCoverageFrom": [
-      "src/*.{js,ts}"
+      "src/*.{js,ts}",
+      "src/**/*.{js,ts}"
     ]
   },
   "prettier": {
@@ -91,10 +92,13 @@
     "@types/node": "^10.14.15",
     "@types/qs": "^6.5.3",
     "@types/webpack-env": "^1.14.0",
+    "atob": "^2.1.2",
     "body-parser": "^1.19.0",
     "clean-webpack-plugin": "^2.0.2",
     "colors": "^1.3.2",
     "commitizen": "^3.0.0",
+    "connect-multiparty": "^2.2.0",
+    "cookie-parser": "^1.4.4",
     "coveralls": "^3.0.2",
     "cross-env": "^5.2.0",
     "css-loader": "^3.2.0",
@@ -109,6 +113,7 @@
     "lodash.camelcase": "^4.3.0",
     "nodemon": "^1.19.0",
     "postcss-cssnext": "^3.1.0",
+    "postcss-loader": "^3.0.0",
     "prettier": "^1.14.3",
     "prompt": "^1.0.0",
     "qs": "^6.7.0",
@@ -136,8 +141,5 @@
     "webpack-cli": "^3.3.2",
     "webpack-dev-middleware": "^3.7.0",
     "webpack-hot-middleware": "^2.25.0"
-  },
-  "dependencies": {
-    "postcss-loader": "^3.0.0"
   }
 }

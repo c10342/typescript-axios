@@ -6,6 +6,11 @@ import { transformRequest, transformResponse } from './helpers/data'
 const defaults: AxiosRequestConfig = {
   method: 'get',
   timeout: 0,
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
+  validateStatus: function(status: number): boolean {
+    return status >= 200 && status < 300
+  },
   headers: {
     // 每个请求都带上common里面的key-val
     common: {

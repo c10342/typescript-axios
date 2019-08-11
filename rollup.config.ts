@@ -7,7 +7,7 @@ import json from 'rollup-plugin-json'
 
 const pkg = require('./package.json')
 
-const libraryName = 'index'
+const libraryName = 'axios'
 
 export default {
   input: `src/${libraryName}.ts`,

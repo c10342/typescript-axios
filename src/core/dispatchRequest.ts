@@ -3,13 +3,23 @@ import xhr from './xhr'
 import { buildURL } from '../helpers/url'
 import { flattenHeaders } from '../helpers/headers'
 import transform from './transform'
-import defaults from '../default'
+import { isAbsoluteURL, combineURL } from '../helpers/util'
 
 export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
+  // 发送请求前先检查时候取消过请求
+  throwIfCancellationRequested(config)
   processConfig(config)
-  return xhr(config).then(res => {
-    return transformResponseData(res)
-  })
+  return xhr(config).then(
+    res => {
+      return transformResponseData(res)
+    },
+    e => {
+      if (e && e.response) {
+        e.response = transformResponseData(e.responed)
+      }
+      return Promise.reject(e)
+    }
+  )
 }
 
 /**
@@ -29,15 +39,18 @@ function processConfig(config: AxiosRequestConfig): void {
 }
 
 /**
- * 构建get请求url
+ * 构建请求url
  *
  * @param {AxiosRequestConfig} config
  * @returns {string}
  */
-function transformURL(config: AxiosRequestConfig): string {
-  const { url, params } = config
+export function transformURL(config: AxiosRequestConfig): string {
+  let { url, params, paramsSerializer, baseURL } = config
+  if (baseURL && !isAbsoluteURL(url!)) {
+    url = combineURL(baseURL, url)
+  }
   // url! 断言url不为空
-  return buildURL(url!, params)
+  return buildURL(url!, params, paramsSerializer)
 }
 
 /**
@@ -49,4 +62,11 @@ function transformURL(config: AxiosRequestConfig): string {
 function transformResponseData(res: AxiosResponse): AxiosResponse {
   res.data = transform(res.data, res.headers, res.config.transformRespond)
   return res
+}
+
+// 已经取消过请求就不用在此发送请求了
+function throwIfCancellationRequested(config: AxiosRequestConfig): void {
+  if (config.canceltoken) {
+    config.canceltoken.throwIfRequested()
+  }
 }

@@ -2,7 +2,7 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const webpack = require('webpack')
-const PostcssCssnext = require('postcss-cssnext')
+// const PostcssCssnext = require('postcss-cssnext')
 
 
 module.exports = {
@@ -25,31 +25,31 @@ module.exports = {
             exclude: /node_modules/,
             loader: "ts-loader",
         },
-        {
-            test: /\.html$/,
-            exclude: /node_modules/,
-            loader: "html-loader",
-        },
-        {
-            test: /\.css$/,
-            use: [
-                {
-                    loader: 'style-loader'
-                },
-                {
-                    loader: 'css-loader',
-                },
-                {
-                    loader: 'postcss-loader',
-                    options: {
-                        indet: 'postcss',
-                        plugins: [
-                            PostcssCssnext(),
-                        ]
-                    }
-                }
-            ]
-        },
+        // {
+        //     test: /\.html$/,
+        //     exclude: /node_modules/,
+        //     loader: "html-loader",
+        // },
+        // {
+        //     test: /\.css$/,
+        //     use: [
+        //         {
+        //             loader: 'style-loader'
+        //         },
+        //         {
+        //             loader: 'css-loader',
+        //         },
+        //         {
+        //             loader: 'postcss-loader',
+        //             options: {
+        //                 indet: 'postcss',
+        //                 plugins: [
+        //                     PostcssCssnext(),
+        //                 ]
+        //             }
+        //         }
+        //     ]
+        // },
         ]
     },
     plugins: [
