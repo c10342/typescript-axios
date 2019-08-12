@@ -70,7 +70,7 @@ export function isAbsoluteURL(url: string): boolean {
 }
 
 export function combineURL(baseURL: string, url?: string): string {
-  return url ? baseURL.replace(/\/+$/, '') + '/' + url.replace(/^\/+/, '/') : baseURL
+  return url ? baseURL.replace(/\/+$/, '') + '/' + url.replace(/^\/+/, '') : baseURL
 }
 
 /**

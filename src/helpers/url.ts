@@ -46,7 +46,7 @@ export function buildURL(
     Object.keys(params).forEach(key => {
       let val = params[key]
 
-      if (val === null || val === undefined) {
+      if (val === null || typeof val === 'undefined') {
         return
       }
 
@@ -81,7 +81,7 @@ export function buildURL(
     if (markHash !== -1) {
       url = url.slice(0, markHash)
     }
-    url += (url.indexOf('?') === -1 ? '?' : '') + serializedParams
+    url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams
   }
   return url
 }
